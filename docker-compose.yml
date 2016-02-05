@@ -1,0 +1,14 @@
+app:
+  build: .
+  volumes:
+    - .:/ondeck
+  volumes_from:
+    - m2
+  ports:
+    - "8080:8080"
+
+m2:
+  image: cogniteev/echo
+  command: echo 'data container'
+  volumes:
+    - /root/.m2
