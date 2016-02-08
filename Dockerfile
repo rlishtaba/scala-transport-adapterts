@@ -4,6 +4,8 @@ MAINTAINER Roman Lishtaba "roman@lishtaba.com"
 
 ENV SBT_VERSION 0.13.9
 
+RUN apt-get install -y ca-certificates
+
 RUN mkdir -p /usr/local/bin && \
     wget -P /usr/local/bin/ http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/$SBT_VERSION/sbt-launch.jar && \
     ls /usr/local/bin
