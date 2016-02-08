@@ -2,7 +2,7 @@ name := "commutable"
 
 scalaVersion := "2.11.7"
 
-version := "1.4.0"
+version := "1.5.0"
 
 organization := "com.github.rlishtaba"
 
