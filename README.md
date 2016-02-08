@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/rlishtaba/commutable.svg)](https://travis-ci.org/rlishtaba/commutable)
+[![Build Status](https://travis-ci.org/rlishtaba/scala-commutable.svg?branch=master)](https://travis-ci.org/rlishtaba/scala-commutable)
 
 # Commutable
 
