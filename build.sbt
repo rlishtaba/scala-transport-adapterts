@@ -1,8 +1,8 @@
 name := "commutable"
 
-scalaVersion := "2.11.2"
+scalaVersion := "2.11.7"
 
-version := "1.3.0"
+version := "1.4.0"
 
 organization := "com.github.rlishtaba"
 
