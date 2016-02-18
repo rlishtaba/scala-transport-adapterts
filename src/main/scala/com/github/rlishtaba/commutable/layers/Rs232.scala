@@ -6,9 +6,15 @@ import jssc.SerialPort
 import jssc.SerialPortEventListener
 import scala.concurrent._
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.collection.mutable.{Map => params}
 
-protected[commutable] class Rs232(portName: String, options: params[String, String]) extends Transport {
+protected[commutable] class Rs232
+(
+  portName: String,
+  baudRate: Int = 9600,
+  dataBits: Int = 8,
+  stopBits: Int = 1,
+  parity: Int = 0
+) extends Transport {
   private var connected: Boolean = false
   private val serialPortName = portName
   private val port = new SerialPort(serialPortName)
@@ -47,7 +53,7 @@ protected[commutable] class Rs232(portName: String, options: params[String, Stri
     if (isConnected) return isConnected
     try {
       port.openPort()
-      port.setParams(9600, 8, 1, 0)
+      port.setParams(baudRate, dataBits, stopBits, parity)
       port.setEventsMask(eventMask)
       port.addEventListener(eventsListener)
       connected = port.isOpened

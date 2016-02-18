@@ -1,13 +1,13 @@
 package com.github.rlishtaba.commutable
 
-import scala.collection.mutable.{Map => params}
-
-object Factory {
-  def newRs232Layer(port: String, options: params[String, String]): layers.Rs232 = {
-    new layers.Rs232(port, options)
+private[commutable] trait FactoryMethods {
+  def newRs232Layer(port: String, baudRate: Int = 9600, dataBits: Int = 8, stopBits: Int = 1, parity: Int = 0): layers.Transport = {
+    new layers.Rs232(port, baudRate, dataBits, stopBits, parity)
   }
 
-  def newEthernetLayer(ip: String, port: Int): layers.Ethernet = {
+  def newEthernetLayer(ip: String, port: Int): layers.Transport = {
     new layers.Ethernet(ip, port)
   }
 }
+
+object Factory extends FactoryMethods
