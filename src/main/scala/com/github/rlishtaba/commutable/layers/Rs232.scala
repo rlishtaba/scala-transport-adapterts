@@ -44,34 +44,31 @@ protected[commutable] class Rs232
   def pushDown(message: Array[Byte]) = Future {
     if (!isConnected) connect()
     port.writeBytes(message)
-  } map { ok =>
-    if (ok) message
+  } map { status =>
+    if (status) message
     else throw new IOException("Could not finish IO#write operation.")
   }
 
+  @throws[IOException]
   def connect(timeout: Int = 5): Boolean = {
-    if (isConnected) return isConnected
-    try {
+    if (!isConnected) {
       port.openPort()
       port.setParams(baudRate, dataBits, stopBits, parity)
       port.setEventsMask(eventMask)
       port.addEventListener(eventsListener)
       connected = port.isOpened
-    } catch {
-      case ex: IOException =>
-        throw new IOException(s"Cannot establish communication with remote endpoint: $ex")
     }
     isConnected
   }
 
   def disconnect: Boolean = {
-    if (!isConnected) return isConnected
-    port.closePort()
-    connected = port.isOpened
+    if (isConnected) {
+      port.closePort()
+      connected = port.isOpened
+    }
     isConnected
   }
 
-  def isConnected: Boolean = {
+  def isConnected =
     connected
-  }
 }
