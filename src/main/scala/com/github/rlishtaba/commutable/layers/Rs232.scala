@@ -6,9 +6,15 @@ import jssc.SerialPort
 import jssc.SerialPortEventListener
 import scala.concurrent._
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.collection.mutable.{Map => params}
 
-protected[commutable] class Rs232(portName: String, options: params[String, String]) extends Transport {
+protected[commutable] class Rs232
+(
+  portName: String,
+  baudRate: Int = 9600,
+  dataBits: Int = 8,
+  stopBits: Int = 1,
+  parity: Int = 0
+) extends Transport {
   private var connected: Boolean = false
   private val serialPortName = portName
   private val port = new SerialPort(serialPortName)
@@ -38,34 +44,31 @@ protected[commutable] class Rs232(portName: String, options: params[String, Stri
   def pushDown(message: Array[Byte]) = Future {
     if (!isConnected) connect()
     port.writeBytes(message)
-  } map { ok =>
-    if (ok) message
+  } map { status =>
+    if (status) message
     else throw new IOException("Could not finish IO#write operation.")
   }
 
+  @throws[IOException]
   def connect(timeout: Int = 5): Boolean = {
-    if (isConnected) return isConnected
-    try {
+    if (!isConnected) {
       port.openPort()
-      port.setParams(9600, 8, 1, 0)
+      port.setParams(baudRate, dataBits, stopBits, parity)
       port.setEventsMask(eventMask)
       port.addEventListener(eventsListener)
       connected = port.isOpened
-    } catch {
-      case ex: IOException =>
-        throw new IOException(s"Cannot establish communication with remote endpoint: $ex")
     }
     isConnected
   }
 
   def disconnect: Boolean = {
-    if (!isConnected) return isConnected
-    port.closePort()
-    connected = port.isOpened
+    if (isConnected) {
+      port.closePort()
+      connected = port.isOpened
+    }
     isConnected
   }
 
-  def isConnected: Boolean = {
+  def isConnected =
     connected
-  }
 }

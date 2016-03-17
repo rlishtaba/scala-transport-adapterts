@@ -79,7 +79,7 @@ protected[commutable] class Ethernet(ip: String, port: Int) extends Transport {
 
   private def recv(size: Int): Array[Byte] = {
     val buffer = new Array[Byte](size)
-    for (time <- 0 to size - 1) {
+    for (time <- 0 until size) {
       buffer(time) = in.read.toByte
     }
     buffer
