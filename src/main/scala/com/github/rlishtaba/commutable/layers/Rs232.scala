@@ -6,6 +6,7 @@ import jssc.SerialPort
 import jssc.SerialPortEventListener
 import scala.concurrent._
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Success, Try}
 
 protected[commutable] class Rs232
 (
@@ -63,6 +64,7 @@ protected[commutable] class Rs232
 
   def disconnect: Boolean = {
     if (isConnected) {
+      port.removeEventListener()
       port.closePort()
       connected = port.isOpened
     }
