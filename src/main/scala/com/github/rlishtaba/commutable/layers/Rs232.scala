@@ -68,7 +68,7 @@ protected[commutable] class Rs232
       port.closePort()
       connected = port.isOpened
     }
-    isConnected
+    !isConnected
   }
 
   def isConnected =
